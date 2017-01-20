@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "661324651368",
+    "firebase_url": "https://firecast-1eda2.firebaseio.com",
+    "project_id": "firecast-1eda2",
+    "storage_bucket": "firecast-1eda2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661324651368:android:aef558226311eb8f",
+        "android_client_info": {
+          "package_name": "firecast.tarangparikh.com.firecast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "661324651368-uhs7em5mth2dsn1jnsp1iaqeareqrcdv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "firecast.tarangparikh.com.firecast",
+            "certificate_hash": "B9C1627CFAB7F4C6E0305C03398E2737D64CDF33"
+          }
+        },
+        {
+          "client_id": "661324651368-ot4sd7g4efbmfpo2lv01co174va7ia69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_M5_kEbQ31NJb_1mJ82L5z_Yc8Azm2MM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "661324651368-ot4sd7g4efbmfpo2lv01co174va7ia69.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661324651368:android:eaf0bd76043a7e41",
+        "android_client_info": {
+          "package_name": "loginpage.tarangparikh.com.loginpage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "661324651368-d8i8qd1shg77jl0b9fjhub3l744e8ape.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "loginpage.tarangparikh.com.loginpage",
+            "certificate_hash": "B9C1627CFAB7F4C6E0305C03398E2737D64CDF33"
+          }
+        },
+        {
+          "client_id": "661324651368-ot4sd7g4efbmfpo2lv01co174va7ia69.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_M5_kEbQ31NJb_1mJ82L5z_Yc8Azm2MM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "661324651368-ot4sd7g4efbmfpo2lv01co174va7ia69.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
