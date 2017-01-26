@@ -9,31 +9,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="loginpage.tarangparikh.com.loginpage.ProfileActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <Button
+        android:text="SignOut"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonLogout"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="13dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginBottom="164dp" />
+
+    <TextView
+        android:text="Welcome.."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Welcome to DigiPay"
-            android:textColor="#000"
-            android:textAlignment="center"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonLogout"
-            android:text="SignOut"
-            android:layout_gravity="center_horizontal"
-            />
-
-
-
-
-
-    </LinearLayout>
-
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textAlignment="center"
+        android:textSize="24sp" />
 </RelativeLayout>

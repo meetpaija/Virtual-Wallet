@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             register();
         if (view == textSignIn) {
             finish();
-            startActivity(new Intent(this,ProfileActivity.class));
+            startActivity(new Intent(this,LoginActivity.class));
             //SignIn page
         }
     }
