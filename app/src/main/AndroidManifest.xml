@@ -18,8 +18,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ProfileAccount_Activity" />
+        <activity
+            android:name=".DashBoardActivity"
+            android:label="DigiPay"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
