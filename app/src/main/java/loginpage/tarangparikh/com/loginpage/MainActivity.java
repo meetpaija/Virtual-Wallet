@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                  Toast.makeText(MainActivity.this,"You have been Registered",Toast.LENGTH_SHORT).show();
                                  progressDialog.dismiss();
                                  finish();
-                                 startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+                                 startActivity(new Intent(getApplicationContext(),DashBoardActivity.class));
 
 
                              }
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             register();
         if (view == textSignIn) {
             finish();
-            startActivity(new Intent(this,ProfileActivity.class));
+            startActivity(new Intent(this,LoginActivity.class));
             //SignIn page
         }
     }
