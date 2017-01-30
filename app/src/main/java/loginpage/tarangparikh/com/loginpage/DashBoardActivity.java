@@ -63,7 +63,7 @@ public class DashBoardActivity extends AppCompatActivity
                 {
                     FirebaseAuth.getInstance().signOut();
                     startActivity(new Intent(DashBoardActivity.this, LoginActivity.class)); //Go back to home page
-                    Toast.makeText(DashBoardActivity.this,"Successfully Signout..",Toast.LENGTH_LONG).show();
+                    Toast.makeText(DashBoardActivity.this,"Successfully  Signout..",Toast.LENGTH_LONG).show();
                     finish();
                 }
             }
