@@ -52,14 +52,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void userlogin(){
         String email=editTextEmail.getText().toString().trim();
         String password=editTextPassword.getText().toString().trim();
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[@#$%^&+=])(?=\\S+$).{4,}$";
+
         if(TextUtils.isEmpty(email)){
             Toast.makeText(this,"Enter Email Address",Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(password)){
+        else if(TextUtils.isEmpty(password)){
             Toast.makeText(this,"Enter Password",Toast.LENGTH_SHORT).show();
-            //return;
+            return;
         }
+        /*else if (!email.matches(emailPattern)) {
+
+            Toast.makeText(getApplicationContext(), "Please Enter Valid Email Address", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        else if(!password.matches(PASSWORD_PATTERN))
+        {
+            Toast.makeText(this,"enter valid password  ",Toast.LENGTH_SHORT).show();
+            return;
+        }*/
         progressDialog.setMessage("Please Wait....");
         progressDialog.show();
         firebaseAuth.signInWithEmailAndPassword(email,password)
