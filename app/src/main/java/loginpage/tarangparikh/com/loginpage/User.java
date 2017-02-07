@@ -15,4 +15,12 @@ public class User {
         this.username = username;
         this.mobile = mobile;
     }
+
+    public String getUsername()
+    {return username;}
+
+    public String getMobile()
+    {
+        return mobile;
+    }
 }

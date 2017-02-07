@@ -51,7 +51,7 @@ public class DashBoardActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navheader=navigationView.getHeaderView(0);
-        TextView curr_user=(TextView)navheader.findViewById(R.id.user);
+
         TextView curr_email=(TextView)navheader.findViewById(R.id.email);
         navigationView.setNavigationItemSelectedListener(this);
         final DatabaseReference mdatabase=FirebaseDatabase.getInstance().getReference("users");
@@ -61,8 +61,11 @@ public class DashBoardActivity extends AppCompatActivity
             mdatabase.child(firebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-
+                    User user = dataSnapshot.getValue(User.class);
+                    TextView curr_user = (TextView) navheader.findViewById(R.id.user);
+                    curr_user.setText(user.getUsername().toString());
                 }
+
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
@@ -70,7 +73,6 @@ public class DashBoardActivity extends AppCompatActivity
                 }
             });
         }
-
 
         curr_email.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 /*
