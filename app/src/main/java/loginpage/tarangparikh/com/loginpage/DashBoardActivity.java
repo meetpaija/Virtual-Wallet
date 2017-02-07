@@ -1,11 +1,9 @@
 package loginpage.tarangparikh.com.loginpage;
 
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,12 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class DashBoardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,14 +34,14 @@ public class DashBoardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -52,10 +54,43 @@ public class DashBoardActivity extends AppCompatActivity
         TextView curr_user=(TextView)navheader.findViewById(R.id.user);
         TextView curr_email=(TextView)navheader.findViewById(R.id.email);
         navigationView.setNavigationItemSelectedListener(this);
+        final DatabaseReference mdatabase=FirebaseDatabase.getInstance().getReference("users");
+        final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser()!=null)
+        {
+            mdatabase.child(firebaseAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
 
         curr_email.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+/*
+        MenuItem logout=(MenuItem)navheader.findViewById(R.id.action_settings);
+        logout.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+                if(user!=null)
+                {
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(DashBoardActivity.this, LoginActivity.class)); //Go back to home page
+                    Toast.makeText(DashBoardActivity.this,"Successfully Signout..",Toast.LENGTH_LONG).show();
+                    finish();
+                }
+                return true;
+            }
+        });
 
-        Button logout=(Button)findViewById(R.id.logout);
+        Button logout=(Button)findViewById(R.id.button2);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,7 +104,7 @@ public class DashBoardActivity extends AppCompatActivity
                 }
             }
         });
-
+*/
     }
 
     @Override
@@ -98,7 +133,15 @@ public class DashBoardActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+
+            FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+            if(user!=null)
+            {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(DashBoardActivity.this, LoginActivity.class)); //Go back to home page
+                Toast.makeText(DashBoardActivity.this,"Successfully Signout..",Toast.LENGTH_LONG).show();
+                finish();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -140,4 +183,5 @@ public class DashBoardActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

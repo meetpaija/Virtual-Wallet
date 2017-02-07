@@ -17,6 +17,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -67,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirm_pass = editTextConfirm.getText().toString().trim();
-        String username = editTextUsername.getText().toString().trim();
-        String mobile = editTextMobile.getText().toString().trim();
+        final String username = editTextUsername.getText().toString().trim();
+        final String mobile = editTextMobile.getText().toString().trim();
 
 
         String MobilePattern = "[0-9]{10}";
@@ -104,10 +107,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        else if (password != confirm_pass) {
+        else if (!password.equals(confirm_pass)) {
             Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        final DatabaseReference mDatabase=FirebaseDatabase.getInstance().getReference("users");
 
 
 
@@ -118,6 +123,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
+                            //String userId = mDatabase.push().getKey();
+
+                            FirebaseUser cu_user = firebaseAuth.getCurrentUser();
+                            if(cu_user!=null)
+                            {
+                                String Uid=cu_user.getUid();
+                                // creating user object
+                                User user = new User(username,mobile);
+
+                                // pushing user to 'users' node using the userId
+                                mDatabase.child(Uid).setValue(user);
+                            }
+                            else
+                            {
+                                Toast.makeText(MainActivity.this,"user not found",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+
+
+
+
+
                             Toast.makeText(MainActivity.this, "You have been Registered", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                             finish();
