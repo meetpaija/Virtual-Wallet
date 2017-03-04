@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
         if(firebaseUser!=null)
         {
-            startActivity(new Intent(MainActivity.this,WelcomeActivity.class));
+            Intent intent=new Intent(MainActivity.this,WelcomeActivity.class).putExtra("curr_user",firebaseUser.getUid());
+            startActivity(intent);
             finish();
         }
 
@@ -83,15 +84,17 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.show();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+
         firebaseAuth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 progressDialog.dismiss();
                                 if (task.isSuccessful()) {
-
-                                    startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                                    final FirebaseUser firebaseUser=firebaseAuth.getCurrentUser();
+                                    Intent intent=new Intent(MainActivity.this,WelcomeActivity.class).putExtra("curr_user",firebaseUser.getUid());
+                                    startActivity(intent);
                                     finish();
                                 }
                                 else if(!task.isSuccessful())
@@ -136,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
-        finish();
+
     }
 
     public void onLoginFailed() {

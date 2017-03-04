@@ -6,21 +6,16 @@ package loginpage.tarangparikh.com.loginpage;
 public class User {
     public String username;
     public String mobile;
+    public String curr_balance;
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public User(String username, String mobile) {
+    public User(String username, String mobile ,String curr_balance) {
         this.username = username;
         this.mobile = mobile;
+        this.curr_balance=curr_balance;
     }
 
-    public String getUsername()
-    {return username;}
-
-    public String getMobile()
-    {
-        return mobile;
-    }
 }

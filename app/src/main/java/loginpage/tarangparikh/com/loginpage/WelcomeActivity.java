@@ -17,8 +17,12 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        String s=getIntent().getStringExtra("curr_user");
+        final Bundle bundle = new Bundle();
+        bundle.putString("curr_user",s);
         fragmentManager = getSupportFragmentManager();
         fragment = new HomeFragment();
+        fragment.setArguments(bundle);
         fragmentManager.beginTransaction().replace(R.id.main_container,fragment).commit();
         bottomNavigationView=(BottomNavigationView) findViewById(R.id.bottom_view);
 
@@ -30,12 +34,13 @@ public class WelcomeActivity extends AppCompatActivity {
                 switch (id){
                     case R.id.home:
                          fragment = new HomeFragment();
-                        break;
+                        fragment.setArguments(bundle);
+                            break;
                     case R.id.history:
-                        fragment = new HomeFragment();
+                        fragment = new HistoryFragment();
                         break;
                     case R.id.chat:
-                        fragment = new HomeFragment();
+                        fragment = new ChatFragment();
                         break;
                     case R.id.notification:
                         fragment = new NotificationFragment();

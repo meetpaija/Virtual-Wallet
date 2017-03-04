@@ -89,23 +89,20 @@ public class SignupActivity extends AppCompatActivity {
         final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("users");
 
        final  FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        final double bal=100.00;
 
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
-                            //String userId = mDatabase.push().getKey();
-
                             FirebaseUser cu_user = firebaseAuth.getCurrentUser();
                             if(cu_user!=null)
                             {
                                 String Uid=cu_user.getUid();
-                                // creating user object
-                                User user = new User(name,mobile);
-
-                                // pushing user to 'users' node using the userId
+                                User user = new User(name,mobile,String.valueOf(bal));
                                 mDatabase.child(Uid).setValue(user);
+
                             }
                             else
                             {
@@ -121,14 +118,14 @@ public class SignupActivity extends AppCompatActivity {
 
                             Toast.makeText(SignupActivity.this, "You have been Registered", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
+                            Intent intent=new Intent(getApplicationContext(),WelcomeActivity.class).putExtra("curr_user",cu_user.getUid());
+                            startActivity(intent);
                             finish();
-                            startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
-
 
                         } else if(!task.isSuccessful()) {
                             Toast.makeText(SignupActivity.this, "We were not able to Register you...", Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
-
+                            onSignupFailed();
                         }
 
                     }
