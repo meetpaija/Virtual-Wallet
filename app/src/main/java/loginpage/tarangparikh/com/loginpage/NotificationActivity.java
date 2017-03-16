@@ -1,13 +1,9 @@
 package loginpage.tarangparikh.com.loginpage;
 
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,37 +15,29 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-
-public class NotificationFragment extends Fragment {
+public class NotificationActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private ArrayList<Request> A_notification;
+    private ArrayList<Transfer> notifi;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        final View view=inflater.inflate(R.layout.fragment_notification, container, false);
-        recyclerView=(RecyclerView)view.findViewById(R.id.rv);
-        LinearLayoutManager llm=new LinearLayoutManager(getActivity());
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notification);
+
+        recyclerView=(RecyclerView)findViewById(R.id.rv);
+        LinearLayoutManager llm=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(llm);
         recyclerView.setHasFixedSize(true);
 
         initializeData();
 
-        Adapter adapter=new Adapter(A_notification);
-        recyclerView.setAdapter(adapter);
-        return view;
-
     }
-
-
 
     private  void  initializeData()
     {
-        A_notification=new ArrayList<Request>();
-        final DatabaseReference mRequestDB= FirebaseDatabase.getInstance().getReference("pending_request");
+        final DatabaseReference mRequestDB=FirebaseDatabase.getInstance().getReference("pending_request");
         final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
         final FirebaseUser cu_user = firebaseAuth.getCurrentUser();
-        final String uid = this.getArguments().getString("curr_user");
+        final String uid=getIntent().getStringExtra("curr_user");
 
         mRequestDB.child(uid).orderByChild("status").equalTo("Request_sent").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -59,17 +47,12 @@ public class NotificationFragment extends Fragment {
                     // dataSnapshot is the "issue" node with all children with id 0
                     for (DataSnapshot issue : dataSnapshot.getChildren()) {
                         // do something with the individual "issues"
-                        String mobile = issue.getValue(Request.class).mobile;
-                        String amount = issue.getValue(Request.class).amount;
-                        int photoid = R.drawable.noavatar;
-
-                        A_notification.add(new Request(photoid, mobile, amount));
+                        
                     }
                 }
                 else
                 {
-                    Toast.makeText(getActivity(),"No Request Yet....",Toast.LENGTH_LONG).show();
-                    return;
+
                 }
 
             }
@@ -80,6 +63,4 @@ public class NotificationFragment extends Fragment {
             }
         });
     }
-
 }
-

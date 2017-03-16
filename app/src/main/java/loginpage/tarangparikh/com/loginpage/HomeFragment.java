@@ -31,7 +31,6 @@ public class HomeFragment extends Fragment {
         final TextView mtextview1 = (TextView) view.findViewById(R.id.welcome_tv);
         final TextView mtextview2 = (TextView) view.findViewById(R.id.curr_bal_tv);
        final String uid = this.getArguments().getString("curr_user");
-        //Toast.makeText(getActivity(),uid,Toast.LENGTH_LONG).show();
 
         final DatabaseReference mdatabase = FirebaseDatabase.getInstance().getReference("users");
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -61,6 +60,14 @@ public class HomeFragment extends Fragment {
                     ((WelcomeActivity) getActivity()).startActivity(intent);
                 }
             });
+
+        mRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RequestActivity.class).putExtra("curr_user",uid);
+                ((WelcomeActivity) getActivity()).startActivity(intent);
+            }
+        });
 
             return view;
         }

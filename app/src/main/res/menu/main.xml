@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/qr_gen"
+        android:title="Pay via QR Code"
+        android:orderInCategory="101"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/qr_sca"
+        android:title="Scan QR Code"
+        android:orderInCategory="102"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/analysis"
+        android:title="Analysis"
+        android:orderInCategory="103"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="104"
+        android:title="Settings"
+        app:showAsAction="never" />
+</menu>
