@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
             setContentView(R.layout.activity_main);
         progressBar=(ProgressBar)findViewById(R.id.progress);
+        progressBar.setVisibility(View.GONE);
 
 try{
 

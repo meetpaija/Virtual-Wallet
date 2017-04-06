@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import loginpage.tarangparikh.com.loginpage.Register.SignupActivity;
+import loginpage.tarangparikh.com.loginpage.Register.MainActivity;
 import loginpage.tarangparikh.com.loginpage.Reusable.CheckConnection;
 
 public class ProfileFragment extends Fragment {
@@ -36,9 +36,11 @@ try {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getActivity(), SignupActivity.class);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
+
                 Toast.makeText(getActivity(), "Successfully  Signout..", Toast.LENGTH_SHORT).show();
+                return;
             }
         }
 
