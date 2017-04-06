@@ -2,27 +2,20 @@
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="loginpage.tarangparikh.com.loginpage.chat_all_userFragment">
+tools:context="loginpage.tarangparikh.com.loginpage.chat.ChatFragment">
 
-    <android.support.v7.widget.SearchView
+
+    <SearchView
+        android:id="@+id/search_user"
         android:layout_width="match_parent"
-        android:padding="20dp"
-        android:clickable="true"
+        android:layout_height="40dp"
+        android:layout_margin="20dp" />
+
+    <ListView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/search_bar" />
-
-
-<ScrollView
-    android:layout_below="@+id/search_bar"
-    android:id="@+id/sv"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/userRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-</ScrollView>
+        android:layout_below="@+id/search_user"
+        android:id="@+id/chat_list"
+        />
 
 </RelativeLayout>

@@ -1,12 +1,14 @@
-package loginpage.tarangparikh.com.loginpage;
+package loginpage.tarangparikh.com.loginpage.QR_Code;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.zxing.Result;
 
+import loginpage.tarangparikh.com.loginpage.R;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class QR_scanner_Activity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -14,12 +16,13 @@ public class QR_scanner_Activity extends AppCompatActivity implements ZXingScann
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qr_scanner_);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_qr_scanner_);
 
-        zXingScannerView=new ZXingScannerView(this);
-        setContentView(zXingScannerView);
-        zXingScannerView.setResultHandler(this);
+            zXingScannerView = new ZXingScannerView(this);
+            setContentView(zXingScannerView);
+            zXingScannerView.setResultHandler(this);
 
 /*
         Intent intent = new Intent();
@@ -28,7 +31,13 @@ public class QR_scanner_Activity extends AppCompatActivity implements ZXingScann
         intent.setData(uri);
         startActivity(intent);
 */
-        zXingScannerView.startCamera();
+            zXingScannerView.startCamera();
+        }
+
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

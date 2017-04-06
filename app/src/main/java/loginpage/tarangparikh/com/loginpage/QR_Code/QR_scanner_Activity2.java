@@ -1,4 +1,4 @@
-package loginpage.tarangparikh.com.loginpage;
+package loginpage.tarangparikh.com.loginpage.QR_Code;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,8 +19,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import loginpage.tarangparikh.com.loginpage.R;
+import loginpage.tarangparikh.com.loginpage.Reusable.CheckConnection;
+import loginpage.tarangparikh.com.loginpage.Transfer.Transfer;
+import loginpage.tarangparikh.com.loginpage.WelcomeActivity;
+import loginpage.tarangparikh.com.loginpage.Register.User;
 
 public class QR_scanner_Activity2 extends AppCompatActivity {
 
@@ -28,17 +35,24 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
     @Bind(R.id.transfer_qr) Button _transferButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qr_scanner_2);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_qr_scanner_2);
 
-        ButterKnife.bind(this);
+            ButterKnife.bind(this);
 
-        _transferButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                transfer();
-            }
-        });
+            _transferButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    transfer();
+                }
+            });
+        }
+
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void transfer()
@@ -47,7 +61,9 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
             onTransferFailed();
             return;
         }
-
+        CheckConnection connection=new CheckConnection(this);
+        if(connection.connected())
+        {
 
         final ProgressDialog progressDialog = new ProgressDialog(QR_scanner_Activity2.this,
                 R.style.AppTheme_Dark_Dialog);
@@ -60,7 +76,7 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
         //final String id=String.valueOf(1);
 
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         final FirebaseUser cu_user = firebaseAuth.getCurrentUser();
@@ -99,6 +115,12 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
             progressDialog.dismiss();
             return;
         }
+
+        }
+        else {
+            Toast.makeText(this,"Check ur connection and try again..",Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     public void update_bal_at_receiver(final ProgressDialog progressDialog)
@@ -112,30 +134,36 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
 
 
 
-
-        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("users");
+            try{
+        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("Users");
         final String mob=getIntent().getStringExtra("rec_mobile");
 
         Query query = mDatabase.orderByChild("mobile").equalTo(mob);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // dataSnapshot is the "issue" node with all children with id 0
-                    for (DataSnapshot issue : dataSnapshot.getChildren()) {
-                        // do something with the individual "issues"
-                        String receiver=issue.getValue(User.class).username;
-                        String rec_amt=issue.getValue(User.class).curr_balance;
-                        String new_amt=String.valueOf(Double.valueOf(amt)+Double.valueOf(rec_amt));
-                        issue.getRef().child("curr_balance").setValue(new_amt);
+                try {
 
-                        update_bal_at_sender(progressDialog);
+                    if (dataSnapshot.exists()) {
+                        // dataSnapshot is the "issue" node with all children with id 0
+                        for (DataSnapshot issue : dataSnapshot.getChildren()) {
+                            // do something with the individual "issues"
+                            String receiver = issue.getValue(User.class).username;
+                            String rec_amt = issue.getValue(User.class).curr_balance;
+                            String new_amt = String.valueOf(Double.valueOf(amt) + Double.valueOf(rec_amt));
+                            issue.getRef().child("curr_balance").setValue(new_amt);
+
+                            update_bal_at_sender(progressDialog, receiver);
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Can't find the data,plz scan again...", Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                        return;
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    Toast.makeText(getApplicationContext(),"Can't find the data,plz scan again...",Toast.LENGTH_LONG).show();
-                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -147,20 +175,20 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
                 return;
             }
         });
-
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                return;
+            }
 
     }
 
-    public  void update_bal_at_sender(final ProgressDialog progressDialog)
+    public  void update_bal_at_sender(final ProgressDialog progressDialog, final String rec_user)
     {
+        try{
         final String amt=_amount.getText().toString().trim();
-        /// TODO: Implement your own signup logic here.
-        //final String id=String.valueOf(1);
-
-
-
-
-        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("users");
+        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("Users");
         final DatabaseReference mTransferDB=FirebaseDatabase.getInstance().getReference("transfers");
         final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
 
@@ -172,13 +200,18 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-
+                try{
                 String sender_amt=dataSnapshot.getValue(User.class).curr_balance;
                 String new_amt=String.valueOf(Double.valueOf(sender_amt)-Double.valueOf(amt));
                 dataSnapshot.getRef().child("curr_balance").setValue(new_amt);
 
-                sender_transferDB(progressDialog);
-
+                sender_transferDB(progressDialog,rec_user);
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
 
             @Override
@@ -188,12 +221,17 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
                 return;
             }
         });
-
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
-    public void sender_transferDB(final ProgressDialog progressDialog)
+    public void sender_transferDB(final ProgressDialog progressDialog, final String rec_user)
     {
-        //Toast.makeText(TransferActivity.this,"here",Toast.LENGTH_LONG).show();
+        try{
         final String sender_status="Debit";
         final String mob =getIntent().getStringExtra("rec_mobile");
         final String amt=_amount.getText().toString().trim();
@@ -204,12 +242,17 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
         mTransferDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Transfer transfer = new Transfer(mob, amt, sender_status);
+
+            try{
+                Transfer transfer = new Transfer(mob, amt, sender_status,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),rec_user);
                 mTransferDB.child(uid).push().setValue(transfer);
-
-
-
                 reciever_transferDB1(progressDialog);
+            }
+            catch (Exception e)
+            {
+                Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                return;
+            }
             }
 
             @Override
@@ -219,18 +262,26 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
                 return;
             }
         });
-
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     public void reciever_transferDB1(final ProgressDialog progressDialog)
     {
+        try{
         final String mob =getIntent().getStringExtra("rec_mobile");
-        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("users");
+        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("Users");
         final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
         Query query = mDatabase.orderByChild("mobile").equalTo(mob);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
+
                 if (dataSnapshot.exists()) {
                     // dataSnapshot is the "issue" node with all children with id 0
                     for (DataSnapshot issue : dataSnapshot.getChildren()) {
@@ -245,6 +296,12 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
                     progressDialog.dismiss();
                     return;
                 }
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
 
             @Override
@@ -254,22 +311,35 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
                 return;
             }
         });
-
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
 
     }
 
     public void receiver_transferDB2(final ProgressDialog progressDialog, final String rec_key )
     {
-        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("users");
+        try{
+        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("Users");
         final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
         final String uid=getIntent().getStringExtra("curr_user");
         Query q = mDatabase.child(uid);
         q.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
                 String sen_mobile= dataSnapshot.getValue(User.class).mobile;
-                receiver_transferDB3(progressDialog,rec_key,sen_mobile);
-
+                String sen_user= dataSnapshot.getValue(User.class).username;
+                receiver_transferDB3(progressDialog,rec_key,sen_mobile,sen_user);
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
 
             @Override
@@ -279,10 +349,17 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
                 return;
             }
         });
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
-    public void receiver_transferDB3(final ProgressDialog progressDialog, final String rec_key ,final String sen_mobile)
+    public void receiver_transferDB3(final ProgressDialog progressDialog, final String rec_key , final String sen_mobile, final String sen_user)
     {
+        try{
         final String reciever_status="Credit";
         final String amt=_amount.getText().toString().trim();
         final DatabaseReference mTransferDB=FirebaseDatabase.getInstance().getReference("transfers");
@@ -292,8 +369,8 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
         mTransferDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Transfer transfer = new Transfer(sen_mobile, amt, reciever_status);
+                try{
+                Transfer transfer = new Transfer(sen_mobile, amt, reciever_status,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),sen_user);
                 mTransferDB.child(rec_key).push().setValue(transfer);
 
                 progressDialog.dismiss();
@@ -301,6 +378,12 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
                 Intent i=new Intent(getApplicationContext(),WelcomeActivity.class).putExtra("curr_user",uid);
                 startActivity(i);
                 finish();
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
 
             @Override
@@ -311,7 +394,12 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
             }
         });
 
-
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     public void onTransferFailed() {

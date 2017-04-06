@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    >
+
+    <ImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:contentDescription="profile_img"
+        app:srcCompat="@drawable/noavatar"
+        android:id="@+id/profile_img" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:textSize="17dp"
+        android:layout_marginLeft="20dp"
+        android:textColor="@color/black"
+        android:layout_toRightOf="@+id/profile_img"
+        android:id="@+id/user_mobile"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:background="@color/common_google_signin_btn_text_light_focused"
+        android:layout_toRightOf="@+id/profile_img"
+        android:layout_below="@+id/user_mobile"
+        android:id="@+id/view1">
+
+    </View>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_below="@+id/profile_img"
+        android:id="@+id/datetime"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/profile_img"
+        android:layout_below="@+id/view1"
+        android:id="@+id/content"/>
+
+
+</RelativeLayout>

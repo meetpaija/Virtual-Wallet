@@ -1,4 +1,4 @@
-package loginpage.tarangparikh.com.loginpage;
+package loginpage.tarangparikh.com.loginpage.Request;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,7 +19,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import butterknife.ButterKnife;
+import java.util.Calendar;
+
+import loginpage.tarangparikh.com.loginpage.R;
+import loginpage.tarangparikh.com.loginpage.Reusable.CheckConnection;
+import loginpage.tarangparikh.com.loginpage.WelcomeActivity;
+import loginpage.tarangparikh.com.loginpage.Register.User;
 
 public class RequestActivity extends AppCompatActivity {
 
@@ -28,14 +33,14 @@ public class RequestActivity extends AppCompatActivity {
     Button m_request;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_request);
 
 
-        m_mobile=(EditText)findViewById(R.id.mobile_id);
-        m_amount=(EditText)findViewById(R.id.amount);
-        m_request=(Button)findViewById(R.id.request);
-        ButterKnife.bind(this);
+            m_mobile = (EditText) findViewById(R.id.mobile_id);
+            m_amount = (EditText) findViewById(R.id.amount);
+            m_request = (Button) findViewById(R.id.request);
 
             m_request.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -43,19 +48,25 @@ public class RequestActivity extends AppCompatActivity {
                     request();
                 }
             });
+        }
+
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
 
     }
 
     public void request()
+
     {
         if (!validate()) {
-            onRequestFailed();
             return;
         }
-
-
-        m_request.setEnabled(true);
-
+        try{
+        CheckConnection connection=new CheckConnection(this);
+        if(connection.connected())
+        {
         final ProgressDialog progressDialog = new ProgressDialog(RequestActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
@@ -64,16 +75,17 @@ public class RequestActivity extends AppCompatActivity {
 
         final String mob = m_mobile.getText().toString().trim();
         final String amt = m_amount.getText().toString().trim();
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
         final FirebaseUser cu_user = firebaseAuth.getCurrentUser();
 
         final String uid = getIntent().getStringExtra("curr_user");
         Query q = mDatabase.child(uid);
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
+        q.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
                 if (dataSnapshot.exists()) {
                     // dataSnapshot is the "issue" node with all children with id 0
                     // do something with the individual "issues"
@@ -82,12 +94,18 @@ public class RequestActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         return;
                     } else {
-                            sender_requestDB(progressDialog);
+                            check_mobile(progressDialog);
 
                     }
                 } else {
                     Toast.makeText(RequestActivity.this, "Mobile no doesn't register..", Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
+                    return;
+                }
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -99,56 +117,48 @@ public class RequestActivity extends AppCompatActivity {
                 return;
             }
         });
+        }
+        else {
+            Toast.makeText(this,"Check ur connection and try again..",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
-
-    public void sender_requestDB(final ProgressDialog progressDialog)
+    public void check_mobile(final ProgressDialog progressDialog)
     {
-        final String sender_status="Pending";
+        try{
         final String mob = m_mobile.getText().toString().trim();
-        final String amt=m_amount.getText().toString().trim();
-        final DatabaseReference mRequestDB=FirebaseDatabase.getInstance().getReference("pending_request");
-        final String uid=getIntent().getStringExtra("curr_user");
-
-        mRequestDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Request request = new Request(sender_status,mob, amt);
-                mRequestDB.child(uid).push().setValue(request);
-                reciever_requestDB1(progressDialog);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(RequestActivity.this,databaseError.getDetails(),Toast.LENGTH_LONG);
-                progressDialog.dismiss();
-                return;
-            }
-        });
-
-    }
-
-    public void reciever_requestDB1(final ProgressDialog progressDialog)
-    {
-        final String mob = m_mobile.getText().toString().trim();
-        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("users");
+        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("Users");
 
         Query query = mDatabase.orderByChild("mobile").equalTo(mob);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
+
                 if (dataSnapshot.exists()) {
                     // dataSnapshot is the "issue" node with all children with id 0
                     for (DataSnapshot issue : dataSnapshot.getChildren()) {
                         // do something with the individual "issues"
-                        String rec_key = issue.getKey();
-                        receiver_requestDB2(progressDialog,rec_key);
+                        sender_requestDB(progressDialog);
                     }
                 }
                 else
                 {
                     Toast.makeText(RequestActivity.this,"Mobile No not exists...",Toast.LENGTH_LONG).show();
                     progressDialog.dismiss();
+                    return;
+                }
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -161,50 +171,71 @@ public class RequestActivity extends AppCompatActivity {
             }
         });
 
-
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
-    public void receiver_requestDB2(final ProgressDialog progressDialog, final String rec_key )
-    {
-        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("users");
-        final String uid=getIntent().getStringExtra("curr_user");
-        Query q = mDatabase.child(uid);
-        q.addListenerForSingleValueEvent(new ValueEventListener() {
+    public void sender_requestDB(final ProgressDialog progressDialog) {
+    try{
+        final String mob = m_mobile.getText().toString().trim();
+        DatabaseReference mDatabase=FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("Users").orderByChild("mobile").equalTo(mob).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String sen_mobile= dataSnapshot.getValue(User.class).mobile;
-                receiver_requestDB3(progressDialog,rec_key,sen_mobile);
+                try{
+
+                for(DataSnapshot ds:dataSnapshot.getChildren())
+                {
+                    sender_requestDB2(progressDialog,ds.getValue(User.class).username);
+                }
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(),databaseError.getDetails(),Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
-                return;
+
             }
         });
     }
-
-    public void receiver_requestDB3(final ProgressDialog progressDialog, final String rec_key ,final String sen_mobile)
+    catch (Exception e)
     {
-        final String reciever_status="Request_sent";
+        Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        return;
+    }
+    }
+
+    public void sender_requestDB2(final ProgressDialog progressDialog, final String rec_username)
+    {
+        try{
+        final String sender_status="Pending";
+        final String mob = m_mobile.getText().toString().trim();
         final String amt=m_amount.getText().toString().trim();
-        final DatabaseReference mRequestDB=FirebaseDatabase.getInstance().getReference("pending_request");
-        final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        final DatabaseReference mRequestDB=FirebaseDatabase.getInstance().getReference("request");
         final String uid=getIntent().getStringExtra("curr_user");
 
         mRequestDB.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
 
-                Request request = new Request( reciever_status,sen_mobile, amt);
-                mRequestDB.child(rec_key).push().setValue(request);
-
-                progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(),"Your Request is Successfully Send...",Toast.LENGTH_LONG).show();
-                Intent i=new Intent(getApplicationContext(),WelcomeActivity.class).putExtra("curr_user",uid);
-                startActivity(i);
-                finish();
+                Request request = new Request(sender_status,mob, amt,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),rec_username);
+                mRequestDB.child(uid).push().setValue(request);
+                reciever_requestDB1(progressDialog);
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
 
             @Override
@@ -214,16 +245,147 @@ public class RequestActivity extends AppCompatActivity {
                 return;
             }
         });
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
 
+    public void reciever_requestDB1(final ProgressDialog progressDialog)
+    {
+        try{
+        final String mob = m_mobile.getText().toString().trim();
+        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("Users");
+
+        Query query = mDatabase.orderByChild("mobile").equalTo(mob);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
+
+                if (dataSnapshot.exists()) {
+                    // dataSnapshot is the "issue" node with all children with id 0
+                    for (DataSnapshot issue : dataSnapshot.getChildren()) {
+                        // do something with the individual "issues"
+                        String rec_key = issue.getKey();
+
+                        receiver_requestDB2(progressDialog,rec_key);
+                    }
+                }
+                else
+                {
+                    Toast.makeText(RequestActivity.this,"Mobile No not exists...",Toast.LENGTH_LONG).show();
+                    progressDialog.dismiss();
+                    return;
+                }
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(RequestActivity.this,databaseError.getDetails(),Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+                return;
+            }
+        });
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
 
     }
 
+    public void receiver_requestDB2(final ProgressDialog progressDialog, final String rec_key )
+    {
+        try{
+        final DatabaseReference mDatabase= FirebaseDatabase.getInstance().getReference("Users");
+        final String uid=getIntent().getStringExtra("curr_user");
+        Query q = mDatabase.child(uid);
+        q.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
 
-    public void onRequestFailed() {
-        //Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+                String sen_mobile= dataSnapshot.getValue(User.class).mobile;
+                String sen_username=dataSnapshot.getValue(User.class).username;
+                receiver_requestDB3(progressDialog,rec_key,sen_mobile,sen_username);
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
 
-        m_request.setEnabled(true);
-   }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(),databaseError.getDetails(),Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+                return;
+            }
+        });
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    public void receiver_requestDB3(final ProgressDialog progressDialog, final String rec_key ,final String sen_mobile,final String sen_username)
+    {
+        try{
+        final String reciever_status="arrivedRequest";
+        final String amt=m_amount.getText().toString().trim();
+        final DatabaseReference mRequestDB=FirebaseDatabase.getInstance().getReference("request");
+        final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        final String uid=getIntent().getStringExtra("curr_user");
+
+        mRequestDB.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
+                Request request = new Request(reciever_status,sen_mobile, amt,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),sen_username);
+                mRequestDB.child(rec_key).push().setValue(request);
+
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(),"Your Request is Successfully Send...",Toast.LENGTH_LONG).show();
+                Intent i=new Intent(getApplicationContext(),WelcomeActivity.class).putExtra("curr_user",uid);
+                startActivity(i);
+                finish();
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(RequestActivity.this,databaseError.getDetails(),Toast.LENGTH_LONG);
+                progressDialog.dismiss();
+                return;
+            }
+        });
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+    }
+
 
     public boolean validate() {
         boolean valid = true;

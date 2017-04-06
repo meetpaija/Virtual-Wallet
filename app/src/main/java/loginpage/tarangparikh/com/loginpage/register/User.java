@@ -1,4 +1,4 @@
-package loginpage.tarangparikh.com.loginpage;
+package loginpage.tarangparikh.com.loginpage.Register;
 
 /**
  * Created by Meet Paija on 06-02-2017.

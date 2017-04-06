@@ -3,6 +3,7 @@
     package="loginpage.tarangparikh.com.loginpage">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -11,7 +12,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".Register.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,14 +28,13 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".WelcomeActivity" />
-        <activity android:name=".SignupActivity" />
-        <activity android:name=".TransferActivity" />
-        <activity android:name=".NotificationActivity" />
-        <activity android:name=".RequestActivity" />
-        <activity android:name=".QR_gen_Activity" />
-        <activity android:name=".QR_scanner_Activity" />
-        <activity android:name=".QR_scanner_Activity2" />
-        <activity android:name=".item_message"></activity>
+        <activity android:name=".Register.SignupActivity" />
+        <activity android:name=".Transfer.TransferActivity" />
+        <activity android:name=".Request.RequestActivity" />
+        <activity android:name=".QR_Code.QR_gen_Activity" />
+        <activity android:name=".QR_Code.QR_scanner_Activity" />
+        <activity android:name=".QR_Code.QR_scanner_Activity2" />
+        <activity android:name=".chat.MessageActivity"></activity>
     </application>
 
 </manifest>

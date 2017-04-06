@@ -1,9 +1,10 @@
-package loginpage.tarangparikh.com.loginpage;
+package loginpage.tarangparikh.com.loginpage.QR_Code;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,41 +16,56 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
+import loginpage.tarangparikh.com.loginpage.R;
+import loginpage.tarangparikh.com.loginpage.Register.User;
+import loginpage.tarangparikh.com.loginpage.Reusable.CheckConnection;
+
 public class QR_gen_Activity extends AppCompatActivity {
 Bitmap bitmap;
     public final static int QRcodeWidth = 500 ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qr_gen_);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_qr_gen_);
 
+            CheckConnection connection=new CheckConnection(this);
 
-        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference("users");
+            if(connection.connected()) {
+                final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(getString(R.string.userdb));
 
-        final String uid = getIntent().getStringExtra("curr_user");
-        //Toast.makeText(getApplicationContext(),uid,Toast.LENGTH_LONG).show();
-        mDatabase.child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String mobile=dataSnapshot.getValue(User.class).mobile;
-                try{
-                    ImageView imageView = (ImageView) findViewById(R.id.qr_generator);
-                    Bitmap bitmap = TextToImageEncode(mobile);
+                final String uid = getIntent().getStringExtra("curr_user");
+                //Toast.makeText(getApplicationContext(),uid,Toast.LENGTH_LONG).show();
+                mDatabase.child(uid).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String mobile = dataSnapshot.getValue(User.class).mobile;
+                        try {
+                            ImageView imageView = (ImageView) findViewById(R.id.qr_generator);
+                            Bitmap bitmap = TextToImageEncode(mobile);
 
-                    imageView.setImageBitmap(bitmap);
-                } catch (WriterException e) {
-                    e.printStackTrace();
-                }
+                            imageView.setImageBitmap(bitmap);
+                        } catch (WriterException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                else {
+                Toast.makeText(this,"Check ur connection and try again..",Toast.LENGTH_SHORT).show();
 
             }
-        });
+        }
 
-
-
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        }
 
 
     }

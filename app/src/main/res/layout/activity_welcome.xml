@@ -11,20 +11,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="loginpage.tarangparikh.com.loginpage.WelcomeActivity">
 
-
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <FrameLayout
-        android:id="@+id/main_container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_nav"
-        android:layout_alignParentTop="true">
-    </FrameLayout>
+        android:id="@+id/frame">
 
-</ScrollView>
+        <FrameLayout
+            android:id="@+id/main_container"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/bottom_nav"
@@ -45,5 +44,6 @@
         android:id="@+id/bottom_view" />
 
 </FrameLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>

@@ -11,7 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import loginpage.tarangparikh.com.loginpage.History.HistoryFragment;
+import loginpage.tarangparikh.com.loginpage.Notification.NotificationFragment;
+import loginpage.tarangparikh.com.loginpage.QR_Code.QR_gen_Activity;
+import loginpage.tarangparikh.com.loginpage.QR_Code.QR_scanner_Activity;
 import loginpage.tarangparikh.com.loginpage.chat.ChatFragment;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -51,69 +56,62 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome);
-        String s=getIntent().getStringExtra("curr_user");
-        final Bundle bundle = new Bundle();
-        bundle.putString("curr_user",s);
-        fragmentManager = getSupportFragmentManager();
-        fragment = new HomeFragment();
-        fragment.setArguments(bundle);
-        fragmentManager.beginTransaction().replace(R.id.main_container,fragment).commit();
-        bottomNavigationView=(BottomNavigationView) findViewById(R.id.bottom_view);
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_welcome);
+            String uid = getIntent().getStringExtra("curr_user");
+            String name = getIntent().getStringExtra("name");
+            String mobile = getIntent().getStringExtra("mobile");
 
-                int id = item.getItemId();
-                switch (id){
-                    case R.id.home:
-                         fragment = new HomeFragment();
+
+            final Bundle bundle = new Bundle();
+            bundle.putString("curr_user", uid);
+            bundle.putString("name", name);
+            bundle.putString("mobile", mobile);
+
+
+            fragmentManager = getSupportFragmentManager();
+            fragment = new HomeFragment();
+            fragment.setArguments(bundle);
+            fragmentManager.beginTransaction().replace(R.id.main_container, fragment).commit();
+            bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_view);
+
+            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                    int id = item.getItemId();
+                    switch (id) {
+                        case R.id.home:
+                            fragment = new HomeFragment();
                             break;
-                    case R.id.history:
-                        fragment = new HistoryFragment();
-                        break;
-                    case R.id.chat:
-                        fragment = new ChatFragment();
-                        break;
-                    case R.id.notification:
-                        fragment = new NotificationFragment();
-                        break;
-                    case R.id.profile:
-                        fragment = new ProfileFragment();
-                        break;
+                        case R.id.history:
+                            fragment = new HistoryFragment();
+                            break;
+                        case R.id.chat:
+                            fragment = new ChatFragment();
+                            break;
+                        case R.id.notification:
+                            fragment = new NotificationFragment();
+                            break;
+                        case R.id.profile:
+                            fragment = new ProfileFragment();
+                            break;
+                    }
+                    fragment.setArguments(bundle);
+                    final FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.main_container, fragment).commit();
+                    return true;
                 }
-                fragment.setArguments(bundle);
-                final FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.replace(R.id.main_container, fragment).commit();
-                return true;
-            }
-        });
-
-
-/*
-
-                if(item.getItemId()==R.id.profile) {
-                    FrameLayout frameLayout=(FrameLayout)findViewById(R.id.frame);
-                    Button logout = (Button)frameLayout.findViewById(R.id.logout_btn);
-                    logout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            if (user != null) {
-                                FirebaseAuth.getInstance().signOut();
-                                startActivity(new Intent(WelcomeActivity.this, SignupActivity.class)); //Go back to home page
-                                Toast.makeText(WelcomeActivity.this, "Successfully  Signout..", Toast.LENGTH_LONG).show();
-                                finish();
-                            }
-                        }
-                    });
-                }
-                return true;
-            }
+            });
         }
-        );*/
+        catch (Exception e)
+        {
+            Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
+        }
+
     }
 
 }

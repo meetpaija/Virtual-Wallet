@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import loginpage.tarangparikh.com.loginpage.Register.SignupActivity;
+import loginpage.tarangparikh.com.loginpage.Reusable.CheckConnection;
+
 public class ProfileFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,22 +25,35 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view= inflater.inflate(R.layout.fragment_profile, container, false);
 
-
-        Button btn =(Button) view.findViewById(R.id.button3);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) {
-                    FirebaseAuth.getInstance().signOut();
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    ((WelcomeActivity) getActivity()).startActivity(intent);
-                    Toast.makeText(getActivity(), "Successfully  Signout..", Toast.LENGTH_SHORT).show();
+try {
+    CheckConnection connection=new CheckConnection(getContext());
+    if(connection.connected())
+    {
+    Button btn = (Button) view.findViewById(R.id.button3);
+    btn.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getActivity(), SignupActivity.class);
+                startActivity(intent);
+                Toast.makeText(getActivity(), "Successfully  Signout..", Toast.LENGTH_SHORT).show();
             }
         }
 
 
-        });
+    });
+    }
+    else {
+        Toast.makeText(getActivity(),"Check ur connection and try again..",Toast.LENGTH_SHORT).show();
+
+    }
+}
+catch (Exception e)
+{
+    Toast.makeText(getActivity(),e.toString(),Toast.LENGTH_SHORT).show();
+}
             return view;
     }
 
