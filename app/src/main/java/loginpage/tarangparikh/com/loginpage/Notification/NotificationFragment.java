@@ -263,30 +263,18 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     }
 
     private void sender_transferDB(final ProgressDialog progressDialog, final String user, final String mobile, final String amount, final String uid, final String reqest_key) {
-        final String sender_status="Debit";
-        mDatabase.child("transfers").addListenerForSingleValueEvent(new ValueEventListener() {
+       try {
+           final String sender_status = "Debit";
+           Transfer transfer = new Transfer(mobile, amount, sender_status, java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()), user);
+           mDatabase.child("transfers").child(uid).push().setValue(transfer);
+           reciever_transferDB1(progressDialog, uid, mobile, amount, reqest_key);
+       }
+       catch (Exception e)
+       {
+           Toast.makeText(getActivity(),e.toString(),Toast.LENGTH_SHORT).show();
+           return;
+       }
 
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
-                Transfer transfer = new Transfer(mobile, amount, sender_status,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),user);
-                mDatabase.child("transfers").child(uid).push().setValue(transfer);
-                reciever_transferDB1(progressDialog,uid,mobile,amount,reqest_key);
-                }
-                catch (Exception e)
-                {
-                    Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(),databaseError.getDetails(),Toast.LENGTH_LONG);
-                progressDialog.dismiss();
-                return;
-            }
-        });
     }
 
     private void reciever_transferDB1(final ProgressDialog progressDialog, final String uid, String mobile, final String amount, final String reqest_key) {
@@ -354,28 +342,19 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
     private void receiver_transferDB3(final ProgressDialog progressDialog, final String rec_key, final String sen_mobile, final String sen_user, final String amount, final String reqest_key) {
         final String reciever_status="Credit";
-        mDatabase.child("transfers").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    Transfer transfer = new Transfer(sen_mobile, amount, reciever_status, java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()), sen_user);
-                    mDatabase.child("transfers").child(rec_key).push().setValue(transfer);
-                    deleteRequestRec(progressDialog, reqest_key, amount, uid);
-                }
-                catch (Exception e)
-                {
-                    Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
+       try {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(),databaseError.getDetails(),Toast.LENGTH_LONG);
-                progressDialog.dismiss();
-                return;
-            }
-        });
+
+           Transfer transfer = new Transfer(sen_mobile, amount, reciever_status, java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()), sen_user);
+           mDatabase.child("transfers").child(rec_key).push().setValue(transfer);
+           deleteRequestRec(progressDialog, reqest_key, amount, uid);
+       }
+       catch (Exception e)
+       {
+           Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
+           return;
+       }
+
     }
 
     private void deleteRequestRec(final ProgressDialog progressDialog, final String reqest_key, String amount, final String uid) {

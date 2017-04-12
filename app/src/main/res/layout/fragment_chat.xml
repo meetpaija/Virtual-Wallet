@@ -14,6 +14,7 @@ tools:context="loginpage.tarangparikh.com.loginpage.chat.ChatFragment">
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingBottom="53dp"
         android:layout_below="@+id/search_user"
         android:id="@+id/chat_list"
         />

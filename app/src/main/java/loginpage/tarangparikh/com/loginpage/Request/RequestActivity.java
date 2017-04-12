@@ -221,30 +221,9 @@ public class RequestActivity extends AppCompatActivity {
         final String amt=m_amount.getText().toString().trim();
         final DatabaseReference mRequestDB=FirebaseDatabase.getInstance().getReference("request");
         final String uid=getIntent().getStringExtra("curr_user");
-
-        mRequestDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
-
                 Request request = new Request(sender_status,mob, amt,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),rec_username);
                 mRequestDB.child(uid).push().setValue(request);
                 reciever_requestDB1(progressDialog);
-                }
-                catch (Exception e)
-                {
-                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(RequestActivity.this,databaseError.getDetails(),Toast.LENGTH_LONG);
-                progressDialog.dismiss();
-                return;
-            }
-        });
         }
         catch (Exception e)
         {
@@ -349,11 +328,6 @@ public class RequestActivity extends AppCompatActivity {
         final DatabaseReference mRequestDB=FirebaseDatabase.getInstance().getReference("request");
         final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
         final String uid=getIntent().getStringExtra("curr_user");
-
-        mRequestDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
                 Request request = new Request(reciever_status,sen_mobile, amt,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),sen_username);
                 mRequestDB.child(rec_key).push().setValue(request);
 
@@ -362,21 +336,8 @@ public class RequestActivity extends AppCompatActivity {
                 Intent i=new Intent(getApplicationContext(),WelcomeActivity.class).putExtra("curr_user",uid);
                 startActivity(i);
                 finish();
-                }
-                catch (Exception e)
-                {
-                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(RequestActivity.this,databaseError.getDetails(),Toast.LENGTH_LONG);
-                progressDialog.dismiss();
-                return;
-            }
-        });
+
         }
         catch (Exception e)
         {

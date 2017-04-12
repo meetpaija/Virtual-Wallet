@@ -36,6 +36,7 @@ try {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 FirebaseAuth.getInstance().signOut();
+                getActivity().finish();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
 

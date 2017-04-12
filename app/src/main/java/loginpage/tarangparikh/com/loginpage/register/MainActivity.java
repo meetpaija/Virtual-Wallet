@@ -50,48 +50,48 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
 try{
-
+    CheckConnection check=new CheckConnection(this);
+    if(check.connected()) {
             FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
             FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             if (firebaseUser != null) {
+
                 progressBar.setVisibility(View.VISIBLE);
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 final String uid = firebaseUser.getUid();
 
-                CheckConnection check=new CheckConnection(this);
-                if(check.connected()) {
 
-                    mDatabase.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabase.child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
 
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            try {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        try {
 
 
-                                String mobile = dataSnapshot.getValue(User.class).mobile.toString();
-                                String name = dataSnapshot.getValue(User.class).username.toString();
+                            String mobile = dataSnapshot.getValue(User.class).mobile.toString();
+                            String name = dataSnapshot.getValue(User.class).username.toString();
 
-                                Intent intent = new Intent(MainActivity.this, WelcomeActivity.class).putExtra("curr_user", uid).putExtra("name", name).putExtra("mobile", mobile);
-                                progressBar.setVisibility(View.GONE);
-                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                startActivity(intent);
-                                finish();
-                            } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                            }
+                            Intent intent = new Intent(MainActivity.this, WelcomeActivity.class).putExtra("curr_user", uid).putExtra("name", name).putExtra("mobile", mobile);
+                            progressBar.setVisibility(View.GONE);
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            startActivity(intent);
+                            finish();
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                         }
+                    }
 
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                            Toast.makeText(getApplicationContext(), "Network Issue..Try Again..", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                    });
-
+                        Toast.makeText(getApplicationContext(), "Network Issue..Try Again..", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                });
+            }
                 }
                 else
                 {
@@ -99,7 +99,7 @@ try{
                     return;
                 }
 
-            }
+
    // progressBar.setVisibility(View.GONE);
 
             _loginButton = (Button) findViewById(R.id.btn_login);

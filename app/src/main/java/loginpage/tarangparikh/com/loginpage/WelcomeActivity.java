@@ -13,10 +13,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import loginpage.tarangparikh.com.loginpage.History.HistoryFragment;
 import loginpage.tarangparikh.com.loginpage.Notification.NotificationFragment;
 import loginpage.tarangparikh.com.loginpage.QR_Code.QR_gen_Activity;
 import loginpage.tarangparikh.com.loginpage.QR_Code.QR_scanner_Activity;
+import loginpage.tarangparikh.com.loginpage.Register.MainActivity;
 import loginpage.tarangparikh.com.loginpage.chat.ChatFragment;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -57,7 +61,17 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
+
         try {
+            FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
+            if(user.equals(null))
+            {
+               Intent i=new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+                return;
+            }
+
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_welcome);
             String uid = getIntent().getStringExtra("curr_user");

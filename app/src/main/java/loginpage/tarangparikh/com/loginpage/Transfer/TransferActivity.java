@@ -342,28 +342,9 @@ public class TransferActivity extends AppCompatActivity {
         final DatabaseReference mTransferDB=FirebaseDatabase.getInstance().getReference("transfers");
         final String uid=getIntent().getStringExtra("curr_user");
 
-        mTransferDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
-                Transfer transfer = new Transfer(mob, amt, sender_status,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),rec_user);
-                    mTransferDB.child(uid).push().setValue(transfer);
+            Transfer transfer = new Transfer(mob, amt, sender_status,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),rec_user);
+            mTransferDB.child(uid).push().setValue(transfer);
                     reciever_transferDB1(progressDialog);
-                }
-                catch (Exception e)
-                {
-                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(TransferActivity.this,databaseError.getDetails(),Toast.LENGTH_LONG);
-                progressDialog.dismiss();
-                return;
-            }
-        });
         }
         catch (Exception e)
         {
@@ -480,11 +461,6 @@ public void receiver_transferDB2(final ProgressDialog progressDialog, final Stri
         final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
         final FirebaseUser cu_user = firebaseAuth.getCurrentUser();
         final String uid=getIntent().getStringExtra("curr_user");
-
-        mTransferDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
                Transfer transfer = new Transfer(sen_mobile, amt, reciever_status,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),sen_user);
                 mTransferDB.child(rec_key).push().setValue(transfer);
 
@@ -494,21 +470,7 @@ public void receiver_transferDB2(final ProgressDialog progressDialog, final Stri
                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 startActivity(i);
                 finish();
-                }
-                catch (Exception e)
-                {
-                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(TransferActivity.this,databaseError.getDetails(),Toast.LENGTH_LONG);
-                progressDialog.dismiss();
-                return;
-            }
-        });
 
         }
         catch (Exception e)

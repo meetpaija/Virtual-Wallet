@@ -237,31 +237,10 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
         final String amt=_amount.getText().toString().trim();
         final DatabaseReference mTransferDB=FirebaseDatabase.getInstance().getReference("transfers");
         final String uid=getIntent().getStringExtra("curr_user");
-
-
-        mTransferDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-            try{
                 Transfer transfer = new Transfer(mob, amt, sender_status,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),rec_user);
                 mTransferDB.child(uid).push().setValue(transfer);
                 reciever_transferDB1(progressDialog);
-            }
-            catch (Exception e)
-            {
-                Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
-                return;
-            }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(),databaseError.getDetails(),Toast.LENGTH_LONG);
-                progressDialog.dismiss();
-                return;
-            }
-        });
         }
         catch (Exception e)
         {
@@ -365,11 +344,6 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
         final DatabaseReference mTransferDB=FirebaseDatabase.getInstance().getReference("transfers");
         final FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
         final String uid=getIntent().getStringExtra("curr_user");
-
-        mTransferDB.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
                 Transfer transfer = new Transfer(sen_mobile, amt, reciever_status,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),sen_user);
                 mTransferDB.child(rec_key).push().setValue(transfer);
 
@@ -378,21 +352,6 @@ public class QR_scanner_Activity2 extends AppCompatActivity {
                 Intent i=new Intent(getApplicationContext(),WelcomeActivity.class).putExtra("curr_user",uid);
                 startActivity(i);
                 finish();
-                }
-                catch (Exception e)
-                {
-                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(),databaseError.getDetails(),Toast.LENGTH_LONG);
-                progressDialog.dismiss();
-                return;
-            }
-        });
 
         }
         catch (Exception e)

@@ -57,10 +57,14 @@ public class HistoryFragment extends Fragment {
                             for (DataSnapshot i : dataSnapshot.getChildren()) {
 
                                 Transfer transfer = i.getValue(Transfer.class);
-                                if (transfer.status.equals("Credit")) {
-                                    content_Array[count] = "You successfully received " + transfer.amount + "/- amount from this user.";
-                                } else if (transfer.status.equals("Debit")) {
-                                    content_Array[count] = "You successfully transmitted " + transfer.amount + "/- amount to this user.";
+                                switch (transfer.status)
+                                {
+                                    case "Credit":content_Array[count] = "You successfully received " + transfer.amount + "/- amount from this user.";
+                                                    break;
+
+                                    case "Debit": content_Array[count] = "You successfully transmitted " + transfer.amount + "/- amount to this user.";
+                                        break;
+
                                 }
 
                                 time_Array[count] = transfer.datetime;

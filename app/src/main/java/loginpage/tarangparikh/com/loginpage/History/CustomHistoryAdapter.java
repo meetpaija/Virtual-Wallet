@@ -53,8 +53,6 @@ public class CustomHistoryAdapter extends BaseAdapter {
         TextView user_mobile;
         TextView content;
         TextView time;
-
-
     }
 
     @Override
@@ -66,7 +64,7 @@ public class CustomHistoryAdapter extends BaseAdapter {
                 ViewHolder viewHolder = null;
 
                 LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                if (convertView == null) {
+
                     convertView = layoutInflater.inflate(R.layout.history_list_view, null);
                     viewHolder = new ViewHolder();
 
@@ -79,7 +77,7 @@ public class CustomHistoryAdapter extends BaseAdapter {
                     viewHolder.user_mobile.setText(rowpos.getUser_mobile().toString());
                     viewHolder.content.setText(rowpos.getContent().toString());
                     viewHolder.time.setText(rowpos.getTime().toString());
-                }
+
             }
             else {
                 Toast.makeText(context,"Check ur connection and try again..",Toast.LENGTH_SHORT).show();

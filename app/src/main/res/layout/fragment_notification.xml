@@ -33,6 +33,7 @@ tools:context="loginpage.tarangparikh.com.loginpage.Notification.NotificationFra
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/view"
+        android:paddingBottom="53dp"
         android:id="@+id/notify_list"/>
 
 
