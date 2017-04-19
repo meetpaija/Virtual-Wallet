@@ -3,8 +3,10 @@ package loginpage.tarangparikh.com.loginpage.Transfer;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -23,10 +25,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 
 import butterknife.ButterKnife;
-import loginpage.tarangparikh.com.loginpage.Reusable.CheckConnection;
 import loginpage.tarangparikh.com.loginpage.R;
-import loginpage.tarangparikh.com.loginpage.WelcomeActivity;
 import loginpage.tarangparikh.com.loginpage.Register.User;
+import loginpage.tarangparikh.com.loginpage.Reusable.CheckConnection;
+import loginpage.tarangparikh.com.loginpage.WelcomeActivity;
 
 public class TransferActivity extends AppCompatActivity {
     private static final String TAG = "TransferActivity";
@@ -44,12 +46,9 @@ public class TransferActivity extends AppCompatActivity {
             m_trasfer = (Button) findViewById(R.id.transfer);
             ButterKnife.bind(this);
 
-
-
-
-
-
-
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("Transfer Money");
 
             m_trasfer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -480,6 +479,18 @@ public void receiver_transferDB2(final ProgressDialog progressDialog, final Stri
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                final String uid = getIntent().getStringExtra("curr_user");
+                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class).putExtra("curr_user",uid);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 
     public boolean validate() {

@@ -2,13 +2,16 @@ package loginpage.tarangparikh.com.loginpage.QR_Code;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.zxing.Result;
 
 import loginpage.tarangparikh.com.loginpage.R;
+import loginpage.tarangparikh.com.loginpage.WelcomeActivity;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class QR_scanner_Activity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
@@ -19,6 +22,9 @@ public class QR_scanner_Activity extends AppCompatActivity implements ZXingScann
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_qr_scanner_);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("QR Code Scanning");
 
             zXingScannerView = new ZXingScannerView(this);
             setContentView(zXingScannerView);
@@ -54,6 +60,19 @@ public class QR_scanner_Activity extends AppCompatActivity implements ZXingScann
     {
         super.onPause();
         zXingScannerView.stopCamera();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                final String uid = getIntent().getStringExtra("curr_user");
+                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class).putExtra("curr_user",uid);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

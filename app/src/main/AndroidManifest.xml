@@ -29,11 +29,31 @@
 
         <activity android:name=".WelcomeActivity" />
         <activity android:name=".Register.SignupActivity" />
-        <activity android:name=".Transfer.TransferActivity" />
-        <activity android:name=".Request.RequestActivity" />
-        <activity android:name=".QR_Code.QR_gen_Activity" />
-        <activity android:name=".QR_Code.QR_scanner_Activity" />
-        <activity android:name=".QR_Code.QR_scanner_Activity2" />
+        <activity android:name=".Transfer.TransferActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".WelcomeActivity" />
+        </activity>
+        <activity android:name=".Request.RequestActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".WelcomeActivity" />
+        </activity>
+        <activity android:name=".QR_Code.QR_gen_Activity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".WelcomeActivity" />
+        </activity>
+        <activity android:name=".QR_Code.QR_scanner_Activity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".WelcomeActivity" />
+        </activity>
+        <activity android:name=".QR_Code.QR_scanner_Activity2" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".WelcomeActivity" />
+        </activity>
         <activity android:name=".chat.MessageActivity"></activity>
     </application>
 

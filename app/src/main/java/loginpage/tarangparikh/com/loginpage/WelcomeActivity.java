@@ -54,6 +54,11 @@ public class WelcomeActivity extends AppCompatActivity {
             startActivity(i);
             return true;
         }
+        else if(id==R.id.refresh){
+            Intent i=new Intent(WelcomeActivity.this,WelcomeActivity.class).putExtra("curr_user",s);
+            startActivity(i);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -75,14 +80,10 @@ public class WelcomeActivity extends AppCompatActivity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_welcome);
             String uid = getIntent().getStringExtra("curr_user");
-            String name = getIntent().getStringExtra("name");
-            String mobile = getIntent().getStringExtra("mobile");
 
 
             final Bundle bundle = new Bundle();
             bundle.putString("curr_user", uid);
-            bundle.putString("name", name);
-            bundle.putString("mobile", mobile);
 
 
             fragmentManager = getSupportFragmentManager();

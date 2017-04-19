@@ -1,8 +1,11 @@
 package loginpage.tarangparikh.com.loginpage.QR_Code;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -19,6 +22,7 @@ import com.google.zxing.common.BitMatrix;
 import loginpage.tarangparikh.com.loginpage.R;
 import loginpage.tarangparikh.com.loginpage.Register.User;
 import loginpage.tarangparikh.com.loginpage.Reusable.CheckConnection;
+import loginpage.tarangparikh.com.loginpage.WelcomeActivity;
 
 public class QR_gen_Activity extends AppCompatActivity {
 Bitmap bitmap;
@@ -28,6 +32,9 @@ Bitmap bitmap;
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_qr_gen_);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle("QR Code");
 
             CheckConnection connection=new CheckConnection(this);
 
@@ -105,4 +112,16 @@ Bitmap bitmap;
         bitmap.setPixels(pixels, 0, 500, 0, 0, bitMatrixWidth, bitMatrixHeight);
         return bitmap;
         }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                final String uid = getIntent().getStringExtra("curr_user");
+                Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class).putExtra("curr_user",uid);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
