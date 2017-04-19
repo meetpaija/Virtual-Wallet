@@ -40,7 +40,7 @@ try {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent);
 
-                Toast.makeText(getActivity(), "Successfully  Signout..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Successfully  Signout..", Toast.LENGTH_SHORT).show();
                 return;
             }
         }

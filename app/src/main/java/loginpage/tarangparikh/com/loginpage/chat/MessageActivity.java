@@ -136,17 +136,16 @@ public class MessageActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                                    return;
                                 }
 
                                 @Override
                                 public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
+                                    return;
                                 }
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
-                                    Toast.makeText(getApplicationContext(), databaseError.toString(), Toast.LENGTH_SHORT).show();
                                     return;
                                 }
                             });
