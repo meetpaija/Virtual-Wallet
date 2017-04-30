@@ -18,12 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import loginpage.tarangparikh.com.loginpage.R;
@@ -198,18 +194,16 @@ public class MessageActivity extends AppCompatActivity {
 
     private String create_roomname(String user1,String user2)
     {
-        List<String> strings = Arrays.asList(user1,user2);
-        Collections.sort(strings, new Comparator<String>() {
-            public int compare(String o1, String o2) {
-                return extractInt(o1) - extractInt(o2);
-            }
+        int compare = user1.compareTo(user2);
+        if (compare < 0){
+            return user2+user1;
+        }
+        else if (compare > 0) {
+            return user1+user2;
+        }
+        else {
+            return user1+user2;
+        }
 
-            int extractInt(String s) {
-                String num = s.replaceAll("\\D", "");
-                // return 0 if no digits found
-                return num.isEmpty() ? 0 : Integer.parseInt(num);
-            }
-        });
-        return strings.get(0)+strings.get(1);
     }
 }

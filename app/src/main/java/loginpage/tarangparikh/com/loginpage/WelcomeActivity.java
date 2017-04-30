@@ -64,6 +64,12 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        // Disable going back to the MainActivity
+        moveTaskToBack(false);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 

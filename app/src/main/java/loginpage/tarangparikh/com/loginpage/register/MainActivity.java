@@ -80,6 +80,7 @@ try{
                             finish();
                         } catch (Exception e) {
                             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                            return;
                         }
                     }
 
@@ -128,7 +129,7 @@ try{
         catch(Exception e)
         {
             Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
-
+            return;
         }
     }
 

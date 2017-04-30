@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_edit_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="loginpage.tarangparikh.com.loginpage.EditProfileActivity">
+
+
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_pic"
+        android:background="@color/common_google_signin_btn_text_light_disabled">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="20dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/noavatar"
+            android:id="@+id/circleView"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="16dp"
+        android:id="@+id/view"
+        android:layout_below="@+id/profile_pic"></View>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/edit">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/userlayout"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:textSize="20dp"
+                android:id="@+id/username"
+                android:inputType="textPersonName"
+                android:hint="Username"
+                android:textColorHint="?android:attr/textColorLinkInverse" />
+        </android.support.design.widget.TextInputLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/view2"
+        android:layout_below="@+id/userlayout"></View>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/view2"
+        android:id="@+id/mobilelayout"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:textSize="20dp"
+                android:id="@+id/mobile"
+                android:inputType="number"
+                android:hint="Mobile"
+                android:textColorHint="?android:attr/textColorLinkInverse" />
+        </android.support.design.widget.TextInputLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/view3"
+        android:layout_below="@+id/mobilelayout"></View>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/view3"
+        android:id="@+id/passwordlayout"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:layout_margin="10dp"
+            android:text="Change Password"
+            android:textSize="20dp"
+            android:id="@+id/pass_hint"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/pass_hint"
+            android:background="@android:color/darker_gray"
+            android:id="@+id/changeview"></View>
+        </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/changepwdlayout"
+                android:layout_below="@+id/passwordlayout">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/oldpwdlayout"
+                >
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:textSize="20dp"
+                        android:id="@+id/oldpassword"
+                        android:inputType="textPassword"
+                        android:hint="Ente Old Password"
+                        android:textColorHint="?android:attr/textColorLinkInverse" />
+                </android.support.design.widget.TextInputLayout>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/oldpwdlayout"
+                android:id="@+id/newpwdlayout">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:id="@+id/view5"></View>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/view5"
+            android:layout_marginBottom="8dp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:textSize="20dp"
+                android:id="@+id/password"
+                android:inputType="textPassword"
+                android:hint="Ente New Password"
+                android:textColorHint="?android:attr/textColorLinkInverse" />
+        </android.support.design.widget.TextInputLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:id="@+id/view6"
+        android:layout_below="@+id/newpwdlayout"></View>
+</RelativeLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+    </RelativeLayout>
+</RelativeLayout>

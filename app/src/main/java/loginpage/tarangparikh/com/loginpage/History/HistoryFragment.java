@@ -88,7 +88,7 @@ public class HistoryFragment extends Fragment {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        return;
                     }
                 });
 

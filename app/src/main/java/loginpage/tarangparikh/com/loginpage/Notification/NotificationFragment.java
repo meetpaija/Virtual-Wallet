@@ -98,27 +98,30 @@ public class NotificationFragment extends Fragment {
                                 }
                                 CustomNotificationAdapter customAdapter = new CustomNotificationAdapter(getContext(), rowItemNotify);
                                 listView.setAdapter(customAdapter);
+                                return;
                             } else {
                                 Toast.makeText(getActivity(), "No Requests Yet..", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
-
                         } else {
                             Toast.makeText(getActivity(), "No Requests Yet..", Toast.LENGTH_SHORT).show();
                             return;
                         }
+
                     }
                     catch (Exception e)
                     {
                         Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
                         return;
                     }
+
                     }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     Toast.makeText(getActivity(),databaseError.toString(),Toast.LENGTH_LONG).show();
+                    return;
                 }
             });
 
@@ -157,6 +160,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                             return;
                                         } else {
                                             update_bal_at_receiver(rec_user,mobile,amount,uid,reqest_key);
+                                            return;
                                         }
                                     }
 
@@ -174,6 +178,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                return;
                             }
                         });
 
@@ -209,6 +214,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             issue.getRef().child("curr_balance").setValue(new_amt);
 
                             update_bal_at_sender(progressDialog, receiver, user, mobile, amount, uid, request_key);
+                            return;
                         }
                     } else {
                         Toast.makeText(getActivity(), "Mobile No not exists...", Toast.LENGTH_LONG).show();
@@ -244,6 +250,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String new_amt=String.valueOf(Double.valueOf(sender_amt)-Double.valueOf(amount));
                 dataSnapshot.getRef().child("curr_balance").setValue(new_amt);
                 sender_transferDB(progressDialog,user,mobile,amount,uid,request_key);
+                return;
             }
             catch (Exception e)
             {
@@ -268,6 +275,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            Transfer transfer = new Transfer(mobile, amount, sender_status, java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()), user);
            mDatabase.child("transfers").child(uid).push().setValue(transfer);
            reciever_transferDB1(progressDialog, uid, mobile, amount, reqest_key);
+           return;
        }
        catch (Exception e)
        {
@@ -289,6 +297,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         // do something with the individual "issues"
                         String rec_key = issue.getKey();
                         receiver_transferDB2(progressDialog,rec_key,uid,amount,reqest_key);
+                        return;
                     }
                 }
                 else
@@ -323,6 +332,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 String sen_mobile= dataSnapshot.getValue(User.class).mobile;
                 String sen_user= dataSnapshot.getValue(User.class).username;
                 receiver_transferDB3(progressDialog,rec_key,sen_mobile,sen_user,amount,reqest_key);
+                    return;
                 }
                 catch (Exception e)
                 {
@@ -348,6 +358,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
            Transfer transfer = new Transfer(sen_mobile, amount, reciever_status, java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()), sen_user);
            mDatabase.child("transfers").child(rec_key).push().setValue(transfer);
            deleteRequestRec(progressDialog, reqest_key, amount, uid);
+           return;
        }
        catch (Exception e)
        {

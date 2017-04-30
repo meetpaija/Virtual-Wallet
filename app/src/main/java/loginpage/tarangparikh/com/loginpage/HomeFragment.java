@@ -69,7 +69,8 @@ public class HomeFragment extends Fragment {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    Toast.makeText(getContext(),databaseError.toString(),Toast.LENGTH_SHORT).show();
+                    return;
                 }
             });
 
