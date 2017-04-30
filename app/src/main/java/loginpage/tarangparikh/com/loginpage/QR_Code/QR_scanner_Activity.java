@@ -20,6 +20,7 @@ public class QR_scanner_Activity extends AppCompatActivity implements ZXingScann
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
+
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_qr_scanner_);
             ActionBar actionBar = getSupportActionBar();
@@ -30,19 +31,12 @@ public class QR_scanner_Activity extends AppCompatActivity implements ZXingScann
             setContentView(zXingScannerView);
             zXingScannerView.setResultHandler(this);
 
-/*
-        Intent intent = new Intent();
-        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", getPackageName(), null);
-        intent.setData(uri);
-        startActivity(intent);
-*/
             zXingScannerView.startCamera();
         }
-
         catch (Exception e)
         {
             Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
         }
     }
 
@@ -68,8 +62,11 @@ public class QR_scanner_Activity extends AppCompatActivity implements ZXingScann
             case android.R.id.home:
                 final String uid = getIntent().getStringExtra("curr_user");
                 Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class).putExtra("curr_user",uid);
+                overridePendingTransition(R.transition.push_right_in, R.transition.push_right_out);
                 startActivity(intent);
+                finish();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

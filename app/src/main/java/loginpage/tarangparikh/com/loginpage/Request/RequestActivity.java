@@ -358,6 +358,7 @@ public class RequestActivity extends AppCompatActivity {
             case android.R.id.home:
                 final String uid = getIntent().getStringExtra("curr_user");
                 Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class).putExtra("curr_user",uid);
+                finish();
                 startActivity(intent);
                 return true;
             default:

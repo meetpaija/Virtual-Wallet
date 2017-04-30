@@ -46,16 +46,19 @@ public class WelcomeActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.qr_gen) {
             Intent i=new Intent(WelcomeActivity.this,QR_gen_Activity.class).putExtra("curr_user",s);
+
             startActivity(i);
             return true;
         }
         else if (id == R.id.qr_sca) {
             Intent i=new Intent(WelcomeActivity.this,QR_scanner_Activity.class).putExtra("curr_user",s);
+
             startActivity(i);
             return true;
         }
         else if(id==R.id.refresh){
             Intent i=new Intent(WelcomeActivity.this,WelcomeActivity.class).putExtra("curr_user",s);
+            finish();
             startActivity(i);
             return true;
         }

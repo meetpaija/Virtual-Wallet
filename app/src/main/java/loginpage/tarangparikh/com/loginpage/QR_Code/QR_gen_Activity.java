@@ -52,26 +52,30 @@ Bitmap bitmap;
                             Bitmap bitmap = TextToImageEncode(mobile);
 
                             imageView.setImageBitmap(bitmap);
+
                         } catch (WriterException e) {
                             e.printStackTrace();
+                            return;
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Toast.makeText(getApplicationContext(),databaseError.toString(),Toast.LENGTH_SHORT);
+                        return;
                     }
                 });
             }
                 else {
                 Toast.makeText(this,"Check ur connection and try again..",Toast.LENGTH_SHORT).show();
-
+                return;
             }
         }
 
         catch (Exception e)
         {
             Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
         }
 
 
@@ -118,7 +122,10 @@ Bitmap bitmap;
             case android.R.id.home:
                 final String uid = getIntent().getStringExtra("curr_user");
                 Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class).putExtra("curr_user",uid);
+                overridePendingTransition(R.transition.push_right_in, R.transition.push_right_out);
                 startActivity(intent);
+
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
