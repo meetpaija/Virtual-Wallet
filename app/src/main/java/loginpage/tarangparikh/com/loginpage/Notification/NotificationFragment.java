@@ -46,42 +46,26 @@ public class NotificationFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.notify_list);
         rowItemNotify=new ArrayList<RowItemNotify>();
 
-            this.uid=this.getArguments().getString("curr_user");
+            uid=this.getArguments().getString("curr_user");
 
             mDatabase.child("request").child(uid).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     try {
                         if (dataSnapshot.exists()) {
-                            boolean flag = false;
-
+                            int count = 0;
+                            int child = (int) dataSnapshot.getChildrenCount();
+                            final String[] time_Array = new String[child];
+                            final String[] user_Array = new String[child];
+                            final String[] amount_Array = new String[child];
+                            final String[] mobile_Array = new String[child];
+                            final String[] status_Array = new String[child];
+                            final String[] reqest_key = new String[child];
 
                             for (DataSnapshot i : dataSnapshot.getChildren()) {
-
-                                Request request = i.getValue(Request.class);
-
-                                if (request.status.equals("arrivedRequest")) {
-                                    flag = true;
-                                }
-                            }
-
-                            if (flag == true) {
-                                int count = 0;
-                                int child = (int) dataSnapshot.getChildrenCount();
-                                final String[] time_Array = new String[child];
-                                final String[] user_Array = new String[child];
-                                final String[] amount_Array = new String[child];
-                                final String[] mobile_Array = new String[child];
-                                final String[] status_Array = new String[child];
-                                final String[] reqest_key = new String[child];
-
-
-                                for (DataSnapshot i : dataSnapshot.getChildren()) {
-
                                     Request request = i.getValue(Request.class);
 
                                     if (request.status.equals("arrivedRequest")) {
-                                        flag = true;
                                         reqest_key[count] = i.getKey();
                                         time_Array[count] = request.datetime;
                                         user_Array[count] = request.username;
@@ -98,18 +82,13 @@ public class NotificationFragment extends Fragment {
                                 }
                                 CustomNotificationAdapter customAdapter = new CustomNotificationAdapter(getContext(), rowItemNotify);
                                 listView.setAdapter(customAdapter);
-                                return;
+
                             } else {
                                 Toast.makeText(getActivity(), "No Requests Yet..", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-
-                        } else {
-                            Toast.makeText(getActivity(), "No Requests Yet..", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
-                    }
                     catch (Exception e)
                     {
                         Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
@@ -120,7 +99,7 @@ public class NotificationFragment extends Fragment {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-                    Toast.makeText(getActivity(),databaseError.toString(),Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(),databaseError.toString(),Toast.LENGTH_LONG).show();
                     return;
                 }
             });
@@ -166,7 +145,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
-                                        Toast.makeText(getActivity(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getActivity(), databaseError.toString(), Toast.LENGTH_LONG).show();
                                         return;
                                     }
                                 });
@@ -206,6 +185,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         // dataSnapshot is the "issue" node with all children with id 0
+                        ArrayList<String> data=new ArrayList<String>();
                         for (DataSnapshot issue : dataSnapshot.getChildren()) {
                             // do something with the individual "issues"
                             String receiver = issue.getValue(User.class).username;
@@ -377,6 +357,7 @@ listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     progressDialog.dismiss();
                     Toast.makeText(getActivity(), "Transfer Done Successfully...", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(getActivity(), WelcomeActivity.class).putExtra("curr_user", uid);
+                    getActivity().finish();
                     startActivity(i);
                     return;
                 }

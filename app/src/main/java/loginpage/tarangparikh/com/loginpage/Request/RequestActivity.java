@@ -41,8 +41,6 @@ public class RequestActivity extends AppCompatActivity {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle("Request Money");
-
-
             m_mobile = (EditText) findViewById(R.id.mobile_id);
             m_amount = (EditText) findViewById(R.id.amount);
             m_request = (Button) findViewById(R.id.request);
@@ -58,6 +56,7 @@ public class RequestActivity extends AppCompatActivity {
         catch (Exception e)
         {
             Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            return;
         }
 
     }
@@ -92,15 +91,13 @@ public class RequestActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try{
                 if (dataSnapshot.exists()) {
-                    // dataSnapshot is the "issue" node with all children with id 0
-                    // do something with the individual "issues"
                     if ((dataSnapshot.getValue(User.class).mobile).equals(mob)) {
                         Toast.makeText(RequestActivity.this, "Mobile no is yours..", Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                         return;
                     } else {
                             check_mobile(progressDialog);
-
+                            return;
                     }
                 } else {
                     Toast.makeText(RequestActivity.this, "Mobile no doesn't register..", Toast.LENGTH_LONG).show();
@@ -110,14 +107,14 @@ public class RequestActivity extends AppCompatActivity {
                 }
                 catch (Exception e)
                 {
-                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(RequestActivity.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(RequestActivity.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
                 return;
             }
@@ -151,8 +148,10 @@ public class RequestActivity extends AppCompatActivity {
                     // dataSnapshot is the "issue" node with all children with id 0
                     for (DataSnapshot issue : dataSnapshot.getChildren()) {
                         // do something with the individual "issues"
-                        sender_requestDB(progressDialog);
+                        reciever_requestDB1(progressDialog);
+                        return;
                     }
+                    return;
                 }
                 else
                 {
@@ -164,6 +163,7 @@ public class RequestActivity extends AppCompatActivity {
                 catch (Exception e)
                 {
                     Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                     return;
                 }
             }
@@ -184,7 +184,7 @@ public class RequestActivity extends AppCompatActivity {
         }
     }
 
-    public void sender_requestDB(final ProgressDialog progressDialog) {
+  /*  public void sender_requestDB(final ProgressDialog progressDialog) {
     try{
         final String mob = m_mobile.getText().toString().trim();
         DatabaseReference mDatabase=FirebaseDatabase.getInstance().getReference();
@@ -192,28 +192,40 @@ public class RequestActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try{
-
-                for(DataSnapshot ds:dataSnapshot.getChildren())
-                {
-                    sender_requestDB2(progressDialog,ds.getValue(User.class).username);
-                }
+                    long i=dataSnapshot.getChildrenCount();
+                    if(i==1) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            sender_requestDB2(progressDialog, ds.getValue(User.class).username);
+                            return;
+                        }
+                        return;
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),"There are two accounts available for same number",Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        return;
+                    }
                 }
                 catch (Exception e)
                 {
                     Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                     return;
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+               // Toast.makeText(getApplicationContext(),databaseError.toString(),Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                return;
             }
         });
     }
     catch (Exception e)
     {
         Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
         return;
     }
     }
@@ -229,13 +241,15 @@ public class RequestActivity extends AppCompatActivity {
                 Request request = new Request(sender_status,mob, amt,java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()),rec_username);
                 mRequestDB.child(uid).push().setValue(request);
                 reciever_requestDB1(progressDialog);
+            return;
         }
         catch (Exception e)
         {
             Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
             return;
         }
-    }
+    }*/
 
     public void reciever_requestDB1(final ProgressDialog progressDialog)
     {
@@ -256,7 +270,9 @@ public class RequestActivity extends AppCompatActivity {
                         String rec_key = issue.getKey();
 
                         receiver_requestDB2(progressDialog,rec_key);
+                        return;
                     }
+                    return;
                 }
                 else
                 {
@@ -268,6 +284,7 @@ public class RequestActivity extends AppCompatActivity {
                 catch (Exception e)
                 {
                     Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                     return;
                 }
             }
@@ -283,6 +300,7 @@ public class RequestActivity extends AppCompatActivity {
         catch (Exception e)
         {
             Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
             return;
         }
 
@@ -302,10 +320,12 @@ public class RequestActivity extends AppCompatActivity {
                 String sen_mobile= dataSnapshot.getValue(User.class).mobile;
                 String sen_username=dataSnapshot.getValue(User.class).username;
                 receiver_requestDB3(progressDialog,rec_key,sen_mobile,sen_username);
+                    return;
                 }
                 catch (Exception e)
                 {
                     Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                     return;
                 }
             }
@@ -321,6 +341,7 @@ public class RequestActivity extends AppCompatActivity {
         catch (Exception e)
         {
             Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
             return;
         }
     }
@@ -341,12 +362,12 @@ public class RequestActivity extends AppCompatActivity {
                 Intent i=new Intent(getApplicationContext(),WelcomeActivity.class).putExtra("curr_user",uid);
                 startActivity(i);
                 finish();
-
-
+            return;
         }
         catch (Exception e)
         {
             Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
             return;
         }
 

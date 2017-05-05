@@ -67,7 +67,7 @@ try {
                     startActivity(intent);
 
                     Toast.makeText(getContext(), "Successfully  Signout..", Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+
                     return;
                 }
             }
@@ -122,24 +122,7 @@ try {
                 return;
             }
         });
-    /*Button btn = (Button) view.findViewById(R.id.button3);
-    btn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            if (user != null) {
-                FirebaseAuth.getInstance().signOut();
-                getActivity().finish();
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent);
 
-                Toast.makeText(getContext(), "Successfully  Signout..", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-
-
-    });*/
 
         ImageView edit=(ImageView)view.findViewById(R.id.edit_details);
         edit.setOnClickListener(new View.OnClickListener() {

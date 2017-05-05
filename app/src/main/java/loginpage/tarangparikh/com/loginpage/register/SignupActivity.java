@@ -126,7 +126,7 @@ public class SignupActivity extends AppCompatActivity {
                         progressDialog.dismiss();
                         Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class).putExtra("curr_user", cu_user.getUid()).putExtra("name", name).putExtra("mobile", mobile);
                         startActivity(intent);
-
+                        finish();
 
                     } else {
                         progressDialog.dismiss();
